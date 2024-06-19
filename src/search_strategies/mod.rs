@@ -22,7 +22,7 @@ pub trait Searcher {
 
 fn heuristic(a: &str, nodes: &HashMap<&str, Node>) -> i32 {
     if let Some(node) = nodes.get(a) {
-        return node.heuristic_value
+        return node.heuristic_value;
     }
 
     0

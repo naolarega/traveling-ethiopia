@@ -42,15 +42,12 @@ impl Searcher for AStar {
             closed_list.insert(current_node.state);
 
             if let Some(node) = state_space_graph.get(current_node.state) {
-                for &next_state in &node.arc {
+                for &(next_state, backward_cost) in &node.arc {
                     if closed_list.contains(next_state) {
                         continue;
                     }
 
-                    let tentative_g = match current_node.g {
-                        Some(g) => g + node.backward_cost,
-                        _ => 0
-                    };
+                    let tentative_g = current_node.g.unwrap() + backward_cost;
                     let neighbor_node = SearchNode {
                         state: next_state,
                         g: Some(tentative_g),
@@ -83,16 +80,15 @@ mod tests {
     #[test]
     fn astar_search() {
         let mut state_space_graph = HashMap::from([
-            ("A", Node::new("A", 7, 1, vec!["B", "C"])),
-            ("B", Node::new("B", 6, 1, vec!["D", "E"])),
-            ("C", Node::new("C", 2, 1, vec!["F"])),
-            ("D", Node::new("D", 5, 1, vec![])),
-            ("E", Node::new("E", 3, 1, vec!["G"])),
-            ("F", Node::new("F", 1, 1, vec!["G"])),
-            ("G", Node::new("G", 0, 1, vec![])),
+            ("A", Node::new("A", 7, vec![("B", 1), ("C", 1)])),
+            ("B", Node::new("B", 6, vec![("D", 1), ("E", 1)])),
+            ("C", Node::new("C", 2, vec![("F", 1)])),
+            ("D", Node::new("D", 5, vec![])),
+            ("E", Node::new("E", 3, vec![("G", 1)])),
+            ("F", Node::new("F", 1, vec![("G", 1)])),
+            ("G", Node::new("G", 0, vec![])),
         ]);
 
-    
         let initial_state = "A";
         let goal_state = "G";
 

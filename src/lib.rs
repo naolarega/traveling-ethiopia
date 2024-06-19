@@ -30,7 +30,6 @@ impl Node {
     }
 }
 
-
 #[derive(Copy, Clone, Eq, PartialEq)]
 struct SearchNode<'a> {
     state: &'a str,
@@ -41,7 +40,7 @@ struct SearchNode<'a> {
 impl<'a> SearchNode<'a> {
     fn f(&self) -> i32 {
         if let Some(g) = self.g {
-            return g + self.h
+            return g + self.h;
         }
 
         0
@@ -50,7 +49,9 @@ impl<'a> SearchNode<'a> {
 
 impl<'a> Ord for SearchNode<'a> {
     fn cmp(&self, other: &Self) -> Ordering {
-        other.f().cmp(&self.f())
+        other
+            .f()
+            .cmp(&self.f())
             .then_with(|| other.h.cmp(&self.h))
             .then_with(|| self.state.cmp(&other.state))
     }
