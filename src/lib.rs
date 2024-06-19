@@ -6,10 +6,13 @@ use std::{cmp::Ordering, collections::HashMap};
 
 use search_strategies::Searcher;
 
-use crate::search_strategies::{astar::AStar, greedy::Greedy, Strategies};
+use crate::search_strategies::{astar::AStar, greedy::Greedy};
+
+pub use crate::search_strategies::Strategies;
 
 mod search_strategies;
 
+#[derive(Debug)]
 pub enum SearchError {
     NoPathFound,
 }
@@ -21,7 +24,7 @@ pub struct Node {
 }
 
 impl Node {
-    fn new(state: &'static str, heuristic_value: i32, arc: Vec<(&'static str, i32)>) -> Self {
+    pub fn new(state: &'static str, heuristic_value: i32, arc: Vec<(&'static str, i32)>) -> Self {
         Node {
             state,
             heuristic_value,
@@ -82,7 +85,7 @@ impl InformedSearch {
         }
     }
 
-    pub fn search(&self, strategy: Strategies) -> Result<Vec<&str>, SearchError> {
+    pub fn try_search(&self, strategy: Strategies) -> Result<Vec<&str>, SearchError> {
         use Strategies::*;
 
         let path = match strategy {
@@ -98,6 +101,12 @@ impl InformedSearch {
     }
 }
 
-pub fn pretty_print_path(path: &[&str]) {
-    todo!()
+pub fn pretty_print_path(path: Result<Vec<&str>, SearchError>, strategy: Strategies) {
+    let string_strategy = strategy.to_string();
+
+    if let Err(error) = path {
+        eprintln!("Unable to find path with {} `{:?}`", string_strategy, error);
+    } else if let Ok(path) = path {
+        println!("Path with {} {:?}", string_strategy, path);
+    }
 }

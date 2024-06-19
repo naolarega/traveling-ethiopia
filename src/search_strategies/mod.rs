@@ -12,6 +12,18 @@ pub enum Strategies {
     GREEDY,
 }
 
+impl ToString for Strategies {
+    fn to_string(&self) -> String {
+        use Strategies::*;
+
+        match self {
+            ASTAR => "A star",
+            GREEDY => "Greedy",
+        }
+        .to_owned()
+    }
+}
+
 pub trait Searcher {
     fn search(
         state_space_graph: &HashMap<&'static str, Node>,

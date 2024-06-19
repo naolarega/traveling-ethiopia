@@ -75,7 +75,7 @@ mod tests {
 
     #[test]
     fn astar_search() {
-        let mut state_space_graph = HashMap::from([
+        let state_space_graph = HashMap::from([
             ("A", Node::new("A", 7, vec![("B", 1), ("C", 1)])),
             ("B", Node::new("B", 6, vec![("D", 1), ("E", 1)])),
             ("C", Node::new("C", 2, vec![("F", 1)])),
